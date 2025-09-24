@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #232526 0%, #414345 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #f5f5f5;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  background: #232526;
+}
+::-webkit-scrollbar-thumb {
+  background: #414345;
+  border-radius: 4px;
+}
