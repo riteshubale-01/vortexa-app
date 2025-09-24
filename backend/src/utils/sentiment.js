@@ -1,7 +1,6 @@
 // Sentiment classification using OpenAI API (or HuggingFace)
-const { Configuration, OpenAIApi } = require('openai');
-const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
-const openai = new OpenAIApi(configuration);
+const OpenAI = require('openai');
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 exports.classifySentiment = async (text) => {
   // Fallback: simple rules if no API key
@@ -13,12 +12,12 @@ exports.classifySentiment = async (text) => {
   }
   // OpenAI call
   const prompt = `Classify the sentiment of this post as Positive, Neutral, or Negative. Give a confidence (0-1) and a one-line explanation.\nPost: ${text}`;
-  const resp = await openai.createChatCompletion({
+  const resp = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 60
   });
-  const content = resp.data.choices[0].message.content;
+  const content = resp.choices[0].message.content;
   // Parse response (expected: Label:..., Confidence:..., Explanation:...)
   const label = /Label:\s*(\w+)/i.exec(content)?.[1] || 'Neutral';
   const confidence = parseFloat(/Confidence:\s*([0-9.]+)/i.exec(content)?.[1]) || 0.5;

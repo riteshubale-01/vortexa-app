@@ -1,19 +1,18 @@
 const nodemailer = require('nodemailer');
-const { Configuration, OpenAIApi } = require('openai');
-const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
-const openai = new OpenAIApi(configuration);
+const OpenAI = require('openai');
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 exports.sendWelcomeEmail = async (to, username) => {
   // Generate welcome message with AI
   let welcomeText = `Welcome to Vortexa, ${username}!`;
   if (process.env.OPENAI_API_KEY) {
     const prompt = `Write a short, friendly welcome email for a new user named ${username} joining a Reddit-like social app.`;
-    const resp = await openai.createChatCompletion({
+    const resp = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 80
     });
-    welcomeText = resp.data.choices[0].message.content;
+    welcomeText = resp.choices[0].message.content;
   }
   // Send email
   const transporter = nodemailer.createTransport({
