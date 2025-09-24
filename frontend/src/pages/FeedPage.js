@@ -19,7 +19,7 @@ export default function FeedPage({ user }) {
   }, []);
   const fetchPosts = async () => {
     const res = await axios.get(`/posts${filter ? `?sentiment=${filter}` : ''}`);
-    setPosts(res.data);
+  setPosts(Array.isArray(res.data) ? res.data : []);
   };
   return (
     <div style={{ maxWidth: 600, margin: '40px auto' }}>
